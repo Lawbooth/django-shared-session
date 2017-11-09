@@ -1,4 +1,4 @@
-# django-shared-session
+# django-shared-session-sites
 
 django-shared-session is a tool that enables cross site session sharing, which can be useful when running the same Django
 application on different domains (for example due to different language mutations). This library can be used for sharing login information as well as session data for both authenticated and anonymous users. If all you need is to share login information, please  consider using some of single sign-on (SSO) solutions which could be better for this specific use case. 
@@ -56,7 +56,34 @@ urlpatterns = [
 
 In order to share sessions with configured sites you also need to use `{% shared_session_loader %}` in your base template.
 
-layout.html:
+But first you need to go to `settings.py` and update the `TEMPLATES` variable, go to `OPTIONS` and then to `libraries` and append `'shared_session': 'shared_session.templatetags.shared_session',`.
+
+It should look like this:
+
+```
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': TEMPLATE_DIRS,
+        'OPTIONS': {
+            'loaders': (
+                ...
+            ),
+            'context_processors': [
+                ...
+            ],
+            'libraries': {
+                ...,
+                'shared_session': 'shared_session.templatetags.shared_session',
+            }
+        },
+    },
+]
+```
+
+Then update the base template
+
+base2.html:
 ```html
 {% load shared_session %}
 
