@@ -30,10 +30,13 @@ class LoaderNode(template.Node):
         host = request.META['HTTP_HOST']
 
         # Build domain list, with support for subdomains
-        domains = copy.copy(settings.SHARED_SESSION_SITES)
-        for domain in settings.SHARED_SESSION_SITES:
-            if host.endswith(domain):
-                domains.remove(domain)
+        if settings.SHARED_SESSION_HUB:
+            domains = [settings.SHARED_SESSION_HUB]
+        else:
+            domains = copy.copy(settings.SHARED_SESSION_SITES)
+            for domain in settings.SHARED_SESSION_SITES:
+                if host.endswith(domain):
+                    domains.remove(domain)
 
         return domains
 
